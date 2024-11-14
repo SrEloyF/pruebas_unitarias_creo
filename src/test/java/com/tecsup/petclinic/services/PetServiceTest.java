@@ -169,9 +169,6 @@ public class PetServiceTest {
         } catch (PetNotFoundException e) {
             fail(e.getMessage());
         }
-
-        // ------------ Validation ---------------
-
         try {
             this.petService.findById(pet.getId());
             assertTrue(false);

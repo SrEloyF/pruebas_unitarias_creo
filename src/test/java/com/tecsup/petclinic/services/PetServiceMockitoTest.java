@@ -36,9 +36,6 @@ public class PetServiceMockitoTest {
         this.petService = new PetServiceImpl(this.repository);
     }
 
-    /**
-     *
-     */
     @Test
     public void testFindPetById() {
 
@@ -59,9 +56,6 @@ public class PetServiceMockitoTest {
 
     }
 
-    /**
-     *
-     */
     @Test
     public void testFindPetByName() {
 
@@ -77,9 +71,6 @@ public class PetServiceMockitoTest {
         assertEquals(petsExpected.size(), pets.size());
     }
 
-    /**
-     *
-     */
     @Test
     public void testFindPetByTypeId() {
 
@@ -95,9 +86,6 @@ public class PetServiceMockitoTest {
         assertEquals(petsExpected.size(), pets.size());
     }
 
-    /**
-     *
-     */
     @Test
     public void testFindPetByOwnerId() {
 
@@ -114,13 +102,6 @@ public class PetServiceMockitoTest {
 
     }
 
-    /**
-     * To get ID generate , you need
-     * setup in id primary key in your
-     * entity this annotation :
-     *
-     * @GeneratedValue(strategy = GenerationType.IDENTITY)
-     */
     @Test
     public void testCreatePet() {
 
@@ -141,10 +122,6 @@ public class PetServiceMockitoTest {
 
     }
 
-
-    /**
-     *
-     */
     @Test
     public void testUpdatePet() {
 
@@ -155,55 +132,40 @@ public class PetServiceMockitoTest {
         Pet newPet = TObjectCreator.newPetForUpdate();
         Pet newPetCreate = TObjectCreator.newPetCreatedForUpdate();
 
-        // ------------ Create ---------------
-
         Mockito.when(this.repository.save(newPet))
                 .thenReturn(newPetCreate);
 
         Pet petCreated = this.petService.create(newPet);
         log.info("{}" , petCreated);
 
-        // ------------ Update ---------------
-
-        // Prepare data for update
         petCreated.setName(UP_PET_NAME);
         petCreated.setOwnerId(UP_OWNER_ID);
         petCreated.setTypeId(UP_TYPE_ID);
 
         Pet newUpdate = petCreated;
-        
-        // Create
+
         Mockito.when(this.repository.save(petCreated))
                 .thenReturn(newUpdate);
 
-        // Execute update
         Pet upgradePet = this.petService.update(petCreated);
         log.info("{}" + upgradePet);
 
-        //            EXPECTED           ACTUAL
         assertEquals(UP_PET_NAME, upgradePet.getName());
         assertEquals(UP_OWNER_ID, upgradePet.getTypeId());
         assertEquals(UP_TYPE_ID, upgradePet.getOwnerId());
     }
 
-    /**
-     *
-     */
     @Test
     public void testDeletePet() {
 
         Pet newPet = TObjectCreator.newPetForDelete();
         Pet newPetCreate = TObjectCreator.newPetCreatedForDelete();
 
-        // ------------ Create ---------------
-
         Mockito.when(this.repository.save(newPet))
                 .thenReturn(newPetCreate);
 
         Pet petCreated = this.petService.create(newPet);
         log.info("{}" ,petCreated);
-
-        // ------------ Delete ---------------
 
         Mockito.doNothing().when(this.repository).delete(newPetCreate);
         Mockito.when(this.repository.findById(newPetCreate.getId()))
@@ -214,9 +176,6 @@ public class PetServiceMockitoTest {
         } catch (PetNotFoundException e) {
             fail(e.getMessage());
         }
-
-        // ------------ Validate ---------------
-
         Mockito.when(this.repository.findById(newPetCreate.getId()))
                 .thenReturn(Optional.ofNullable(null));
 
@@ -228,5 +187,4 @@ public class PetServiceMockitoTest {
         }
 
     }
-
 }
